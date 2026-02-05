@@ -1,3 +1,5 @@
+꿀벌 영장 사이드공지 완성본
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -225,15 +227,81 @@
   <div id="page-notice" class="page-section">
     <div class="container-box">
       <h2>📢 사이드 공지 생성기</h2>
-      <div id="notice-grid" class="notice-grid"></div>
-      <div id="notice-input-section" style="display: none; margin-top: 20px; padding: 15px; background: var(--input-bg); border-radius: 12px; margin-bottom: 20px;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <input type="text" id="notice-uid" placeholder="고유번호" onchange="updateNoticePreview()" style="padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); font-size: 14px;">
-          <input type="text" id="notice-name" placeholder="닉네임" onchange="updateNoticePreview()" style="padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); font-size: 14px;">
-        </div>
-      </div>
-      <textarea id="notice-preview" style="height: 350px; text-align: left; padding: 20px; line-height: 1.6; margin-top:20px; font-weight: bold; font-family: 'Pretendard', sans-serif;"></textarea>
-      <button class="submit-btn" style="background: var(--accent-blue);" onclick="copyNotice()">📋 복사하기</button>
+ <div id="notice-grid" class="notice-grid"></div>
+
+<div id="notice-input-section"
+     style="display:none; margin-top:20px; padding:20px;
+            background:var(--input-bg); border-radius:14px; margin-bottom:20px;">
+
+  <!-- 🔴 범죄자 정보 -->
+  <div style="margin-bottom:20px;">
+    <div style="font-weight:900; margin-bottom:8px; color:var(--accent-red);">
+      🚨 범죄자 정보
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <input
+        type="text"
+        id="criminal-name"
+        placeholder="범죄자 닉네임"
+        oninput="updateNoticePreview()"
+      >
+      <input
+        type="text"
+        id="criminal-uid"
+        placeholder="범죄자 고유번호"
+        oninput="updateNoticePreview()"
+      >
+    </div>
+  </div>
+
+<!-- 🎯 경찰 스나이퍼 사용자 (영장 전용) -->
+<div id="sniper-section"
+     style="margin-bottom:20px; display:none;">
+
+  <div style="font-weight:900; margin-bottom:8px; color:var(--accent-blue);">
+    🎯 경찰 스나이퍼 사용자
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+    <input
+      type="text"
+      id="notice-sniper-name"
+      placeholder="스나이퍼 닉네임"
+      oninput="updateNoticePreview()"
+    >
+    <input
+      type="text"
+      id="notice-sniper-uid"
+      placeholder="스나이퍼 고유번호"
+      oninput="updateNoticePreview()"
+    >
+  </div>
+</div>
+
+
+  <!-- 🟣 팩션 -->
+  <div id="faction-section" style="display:none;">
+    <div style="font-weight:900; margin-bottom:8px; color:#8e44ad;">
+      🏢 영장 진행 팩션
+    </div>
+    <input
+      type="text"
+      id="warrant-faction-name"
+      placeholder="팩션 이름 (예: 꿀벌 경찰청)"
+      oninput="updateNoticePreview()"
+    >
+  </div>
+
+</div>
+
+<textarea id="notice-preview"
+          style="height:350px; text-align:left; padding:20px;
+                 line-height:1.6; margin-top:20px; font-weight:bold;">
+</textarea>
+
+<button class="submit-btn"
+        style="background:var(--accent-blue);"
+        onclick="copyNotice()">📋 복사하기</button>
     </div>
   </div>
 
@@ -373,16 +441,58 @@
     function getNoticeTemplates() {
         const name = localStorage.getItem('myName') || "미입력";
         const uid = localStorage.getItem('myUid') || "미입력";
-        const inputName = document.getElementById('notice-name')?.value || name;
-        const inputUid = document.getElementById('notice-uid')?.value || uid;
+            // 범죄자
+        const criminalName =
+        document.getElementById('criminal-name')?.value || '미입력';
+        const criminalUid =
+        document.getElementById('criminal-uid')?.value || '미입력';
+
+           // 스나이퍼
+         const sniperName =
+        document.getElementById('notice-sniper-name')?.value || '미입력';
+        const sniperUid =
+        document.getElementById('notice-sniper-uid')?.value || '미입력';
+
+          // 팩션
+        const factionName =
+        document.getElementById('warrant-faction-name')?.value || '미입력';
+
+         // 시간
         const attendanceTime = getAttendanceTime();
         const currentTime = getCurrentTime();
         const attendanceTime30 = getAttendanceTime30();
-        
+
+
         return {
-            "출석 공지": `/경찰청 꿀벌 경찰청에서 안내드립니다. ${inputName}(${inputUid})님 ${attendanceTime} 까지 경찰청 사유지로 출석 바랍니다. - 꿀벌 경찰청 -`,
-            "수배 공지": `/경찰청 꿀벌 경찰청에서 안내드립니다. \n닉네임 : ${inputName}\n고유번호 : ${inputUid}\n님 출석 불응 하셔서 \n현재시각: ${currentTime} ~ ${attendanceTime30} (30분)\n까지 수배RP 진행됩니다- 꿀벌 경찰청 -`,
-            "영장 공지": `/경찰청 꿀벌 경찰청에서 안내드립니다. 현 시간부로 30분간 [팩션이름] 사유지에서 영장RP 진행하겠습니다 \n영장 대상자 : ${inputName}\n고유번호 : ${inputUid}\n님 경찰 스나이퍼 사용자 : [닉네임] [고유번호]`,
+       "출석 공지":
+`/경찰청 꿀벌 경찰청에서 안내드립니다.
+${criminalName}(${criminalUid})님
+${attendanceTime} 까지 경찰청 사유지로 출석 바랍니다.
+- 꿀벌 경찰청 -`,
+
+        "수배 공지":
+`/경찰청 꿀벌 경찰청에서 안내드립니다.
+닉네임 : ${criminalName}
+고유번호 : ${criminalUid}
+님 출석 불응 하셔서
+현재시각: ${currentTime} ~ ${attendanceTime30} (30분)
+까지 수배RP 진행됩니다.
+- 꿀벌 경찰청 -`,
+
+        "영장 공지":
+`/경찰청 꿀벌 경찰청에서 안내드립니다.
+현 시간 ${currentTime} 부터 ${attendanceTime30} 까지 30분간
+${factionName} 사유지에서 영장RP 진행하겠습니다.
+
+영장 대상자
+닉네임 : ${criminalName}
+고유번호 : ${criminalUid}
+
+경찰 스나이퍼 사용자
+닉네임 : ${sniperName}
+고유번호 : ${sniperUid}
+- 꿀벌 경찰청 -`
+
         };
     }
 
@@ -421,17 +531,31 @@
                 // 현재 선택된 공지 저장
                 selectedNotice = k;
                 
-                // 출석 공지 또는 수배 공지일 때 입력칸 표시
-                const inputSection = document.getElementById('notice-input-section');
-                if(k === '출석 공지' || k === '수배 공지') {
-                    inputSection.style.display = 'block';
-                    document.getElementById('notice-uid').value = localStorage.getItem('myUid') || '';
-                    document.getElementById('notice-name').value = localStorage.getItem('myName') || '';
-                } else {
-                    inputSection.style.display = 'none';
-                }
-                
-                updateNoticePreview();
+const inputSection = document.getElementById('notice-input-section');
+const sniperSection = document.getElementById('sniper-section');
+const factionSection = document.getElementById('faction-section');
+
+if (k === '출석 공지' || k === '수배 공지') {
+    // 출석 / 수배
+    inputSection.style.display = 'block';
+    sniperSection.style.display = 'none';
+    factionSection.style.display = 'none';
+
+} else if (k === '영장 공지') {
+    // 영장
+    inputSection.style.display = 'block';
+    sniperSection.style.display = 'block';
+    factionSection.style.display = 'block';
+
+} else {
+    // 기타 공지
+    inputSection.style.display = 'none';
+    sniperSection.style.display = 'none';
+    factionSection.style.display = 'none';
+}
+
+updateNoticePreview();
+
             };
             g.appendChild(b);
         }
@@ -482,11 +606,11 @@
       let time = baseTime;
 
       if (bail > 0) {
-        money += bail * 10000000;
+        money += bail * 500000;
         time = Math.max(0, baseTime - bail);
       }
 
-      if (baseTime >= 0) time = Math.max(0, time); else time = Math.max(0, time);
+      if (baseTime >= 5) time = Math.max(5, time); else time = Math.max(0, time);
       
       // ATM이고 피크모드일 때는 0분 허용
       if(isPeakMode && Array.from(document.querySelectorAll('#tab-story .calc-check:checked')).some(c => c.parentElement.innerText.includes('ATM'))) {
