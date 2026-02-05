@@ -378,10 +378,24 @@
         const attendanceTime = getAttendanceTime();
         const currentTime = getCurrentTime();
         const attendanceTime30 = getAttendanceTime30();
-        
+        const warrantFaction = document.getElementById('warrant-faction')?.value || '경찰청';
+
+        const warrantTargetName = document.getElementById('warrant-target-name')?.value || '미입력';
+        const warrantTargetUid  = document.getElementById('warrant-target-uid')?.value || '미입력';
+
+        const warrantSniperName = document.getElementById('warrant-sniper-name')?.value || '미입력';
+        const warrantSniperUid  = document.getElementById('warrant-sniper-uid')?.value || '미입력';
+       
         return {
             "출석 공지": `/경찰청 꿀벌 경찰청에서 안내드립니다. ${inputName}(${inputUid})님 ${attendanceTime} 까지 경찰청 사유지로 출석 바랍니다. - 꿀벌 경찰청 -`,
             "수배 공지": `/경찰청 꿀벌 경찰청에서 안내드립니다. \n닉네임 : ${inputName}\n고유번호 : ${inputUid}\n님 출석 불응 하셔서 \n현재시각: ${currentTime} ~ ${attendanceTime30} (30분)\n까지 수배RP 진행됩니다- 꿀벌 경찰청 -`,
+            "영장 RP 공지": `/경찰청 현시간부로 30분간 ${warrantFaction} 사유지에서 영장RP 진행하겠습니다.
+
+             영장대상자 :
+             ${warrantTargetName} / ${warrantTargetUid}
+
+             경찰 스나이퍼 사용자 :
+             ${warrantSniperName} / ${warrantSniperUid}`,
         };
     }
 
